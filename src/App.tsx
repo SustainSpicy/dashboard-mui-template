@@ -6,28 +6,34 @@ import {
   ThemeProvider,
   Button,
 } from "@mui/material";
-
+import { useSelector } from "react-redux";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { themeSettings } from "./theme";
-type PaletteMode = "light" | "dark";
-function App() {
-  const [mode, setMode] = useState<"dark" | "light">("dark");
+import Layout from "./scenes/layout";
+import Dashboard from "./scenes/dashboard";
 
+interface stateProp {
+  global: {
+    mode: "dark" | "light";
+  };
+}
+function App() {
+  const mode = useSelector((state: stateProp) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {mode === "light" ? (
-        <Button variant="contained" onClick={() => setMode("dark")}>
-          Light
-        </Button>
-      ) : (
-        <Button variant="contained" onClick={() => setMode("light")}>
-          Dark
-        </Button>
-      )}
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+        </Routes>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 
