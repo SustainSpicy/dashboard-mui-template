@@ -30,6 +30,8 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/products" element={<Dashboard />} />
+            <Route path="/customers" element={<Dashboard />} />
           </Route>
         </Routes>
       </ThemeProvider>
